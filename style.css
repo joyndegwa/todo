@@ -1,0 +1,136 @@
+/* Reset some default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(120deg, #57ddff 0%, #c058f3 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.todo-container {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+h1 {
+  font-size: 2.2rem;
+  letter-spacing: 0.1em;
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.todo-list {
+  list-style: none;
+  margin-bottom: 1.5rem;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s;
+}
+
+.todo-item:last-child {
+  border-bottom: none;
+}
+
+.todo-checkbox {
+  margin-right: 1rem;
+  accent-color: #57ddff;
+}
+
+.todo-text {
+  flex: 1;
+  font-size: 1rem;
+  color: #444;
+}
+
+.todo-item.completed .todo-text {
+  text-decoration: line-through;
+  color: #bbb;
+}
+
+.todo-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #888;
+  margin-bottom: 1rem;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+}
+
+.filter-btn {
+  background: none;
+  border: none;
+  color: #888;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.3rem 0.7rem;
+  border-radius: 5px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+  background: #57ddff;
+  color: #fff;
+}
+
+.clear-btn {
+  background: none;
+  border: none;
+  color: #c058f3;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 0.3rem 0.7rem;
+  border-radius: 5px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.clear-btn:hover {
+  background: #f3e6fa;
+}
+
+.drag-info {
+  text-align: center;
+  color: #aaa;
+  font-size: 0.95rem;
+  margin-top: 1.5rem;
+}
+
+.attribution {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+@media (max-width: 500px) {
+  .todo-container {
+    padding: 1rem 0.5rem;
+    max-width: 95vw;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
+}
