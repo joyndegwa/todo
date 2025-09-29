@@ -1,7 +1,7 @@
 /* General Styles */
 body {
   font-family: Arial, sans-serif;
- background-image: url(./images/todo.jpg);
+ background-image: url(./images/Leonardo_Phoenix_10_A_vibrant_and_eclectic_fashionforward_orch_0\ \(2\).jpg);
  background-size: cover;         /* makes the image cover the screen */
  background-position: center;    /* centers the image */
  background-repeat: no-repeat;   /* prevents tiling */
@@ -18,7 +18,7 @@ body {
 .container {
   width: 100%;
   max-width: 500px;
-  background-color: blueviolet;
+  background-color: burlywood;
   padding: 25px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -32,7 +32,7 @@ header.welcome {
 
 header.welcome h2 {
   font-size: 26px;
-  color: hsl(220, 98%, 61%);
+  color: hsl(220, 90%, 47%);
   margin: 0;
 }
 
@@ -190,5 +190,7 @@ footer.attribution a:hover {
 }
 
 
+
+  
 
   
