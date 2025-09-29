@@ -2,37 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
-
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Frontend Mentor | Todo app</title>
-
-  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
-  <style>
-    .attribution { font-size: 11px; text-align: center; }
-    .attribution a { color: hsl(228, 45%, 44%); }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  Todo
+  <div class="container">
+    <!-- Welcome Header -->
+    <header class="welcome">
+      <h2>Welcome back!</h2>
+      <p>your week planner?</p>
+    </header>
 
-  <!-- Add dynamic number --> items left
+    <!-- Title -->
+    <h1>Todo</h1>
 
-  All
-  Active 
-  Completed
+    <!-- Input field -->
+    <div class="input-box">
+      <input type="text" id="todo-input" placeholder="Create a new todo...">
+    </div>
 
-  Clear Completed
+    <!-- Todo list -->
+    <ul id="todo-list"></ul>
 
-  Drag and drop to reorder list
+    <!-- Controls -->
+    <div class="controls">
+      <span id="items-left">0 items left</span>
+      <div class="filters">
+        <button onclick="filterTodos('all')">All</button>
+        <button onclick="filterTodos('active')">Active</button>
+        <button onclick="filterTodos('completed')">Completed</button>
+      </div>
+      <button onclick="clearCompleted()">Clear Completed</button>
+    </div>
 
-  <div class="attribution">
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">joy ndegwa</a>. 
-    
-    Coded by <a href="#">joy ndegwa</a>.
-    
+    <p class="drag-info">Drag and drop to reorder list</p>
   </div>
+
+  <!-- Footer Attribution -->
+  <footer class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Coded by <a href="#">joy ndegwa</a>.
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
