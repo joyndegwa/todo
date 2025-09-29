@@ -1,112 +1,112 @@
-<!-- ...existing code... -->
+//selecting DOM elements
+const todoInput = document.getElementById("todo-input");
+const todoList = document.getElementById("todo-list");
+const itemsLeft = document.getElementById("items-left");
 
-<div class="todo-container">
-  <h1>Todo</h1>
-  <form id="todo-form" autocomplete="off">
-    <input id="todo-input" type="text" placeholder="Create a new todo..." style="width:100%;padding:0.7rem;border-radius:5px;border:1px solid #eee;margin-bottom:1rem;">
-  </form>
-  <ul class="todo-list" id="todo-list"></ul>
-  <div class="todo-actions">
-    <span id="items-left">0 items left</span>
-    <div class="filters">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="active">Active</button>
-      <button class="filter-btn" data-filter="completed">Completed</button>
-    </div>
-    <button class="clear-btn" id="clear-completed">Clear Completed</button>
-  </div>
-  <div class="drag-info">Drag and drop to reorder list</div>
-</div>
 
-<script>
-const todoForm = document.getElementById('todo-form');
-const todoInput = document.getElementById('todo-input');
-const todoList = document.getElementById('todo-list');
-const itemsLeft = document.getElementById('items-left');
-const filterBtns = document.querySelectorAll('.filter-btn');
-const clearBtn = document.getElementById('clear-completed');
-
+// Add new todo when pressing Enter
 let todos = [];
-let filter = 'all';
 
-function renderTodos() {
-  todoList.innerHTML = '';
-  let filtered = todos.filter(todo => {
-    if (filter === 'active') return !todo.completed;
-    if (filter === 'completed') return todo.completed;
-    return true;
-  });
-  filtered.forEach((todo, idx) => {
-    const li = document.createElement('li');
-    li.className = 'todo-item' + (todo.completed ? ' completed' : '');
-    li.draggable = true;
-    li.dataset.index = idx;
+todoInput.addEventListener("keypress", function (e) {
+  if (e.key === "Enter" && todoInput.value.trim() !== "") {
+    addTodo(todoInput.value.trim());
+    todoInput.value = "";
+  }
+});
 
-    li.innerHTML = `
-      <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''}>
-      <span class="todo-text">${todo.text}</span>
-      <button class="clear-btn" style="font-size:1.2em;padding:0 0.5em;">&times;</button>
-    `;
 
-    // Complete toggle
-    li.querySelector('.todo-checkbox').addEventListener('change', () => {
-      todo.completed = !todo.completed;
-      renderTodos();
-    });
 
-    // Delete
-    li.querySelector('.clear-btn').addEventListener('click', () => {
-      todos.splice(todos.indexOf(todo), 1);
-      renderTodos();
-    });
+// Add todo functions
 
-    // Drag events
-    li.addEventListener('dragstart', e => {
-      e.dataTransfer.setData('text/plain', idx);
-    });
-    li.addEventListener('dragover', e => e.preventDefault());
-    li.addEventListener('drop', e => {
-      e.preventDefault();
-      const from = +e.dataTransfer.getData('text/plain');
-      const to = idx;
-      if (from !== to) {
-        const moved = todos.splice(from, 1)[0];
-        todos.splice(to, 0, moved);
-        renderTodos();
-      }
-    });
+function addTodo(text) {
+  const todo = { text, completed: false, id: Date.now() };
+  todos.push(todo);
+  renderTodos();
+}
+
+function toggleComplete(id) {
+  todos = todos.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
+  renderTodos();
+}
+
+function deleteTodo(id) {
+  if (confirm("Are you sure you want to delete this task?")) {
+    todos = todos.filter(t => t.id !== id);
+    renderTodos();
+  }
+}
+
+function filterTodos(filter) {
+  document.querySelectorAll(".filters button").forEach(btn => btn.classList.remove("active"));
+  event.target.classList.add("active");
+
+  let filtered = todos;
+  if (filter === "active") filtered = todos.filter(t => !t.completed);
+  if (filter === "completed") filtered = todos.filter(t => t.completed);
+
+  renderTodos(filtered);
+}
+
+function clearCompleted() {
+  todos = todos.filter(t => !t.completed);
+  renderTodos();
+}
+// Render todos
+
+function renderTodos(filteredTodos = todos) {
+  todoList.innerHTML = "";
+  filteredTodos.forEach(todo => {
+    const li = document.createElement("li");
+    li.setAttribute("draggable", true);
+
+    const circle = document.createElement("div");
+    circle.className = "circle" + (todo.completed ? " checked" : "");
+    circle.onclick = () => toggleComplete(todo.id);
+
+    const span = document.createElement("span");
+    span.textContent = todo.text;
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "delete-btn";
+    deleteBtn.textContent = "X";
+    deleteBtn.onclick = () => deleteTodo(todo.id);
+
+    if (todo.completed) li.classList.add("completed");
+
+    li.appendChild(circle);
+    li.appendChild(span);
+    li.appendChild(deleteBtn);
 
     todoList.appendChild(li);
   });
 
   itemsLeft.textContent = `${todos.filter(t => !t.completed).length} items left`;
+
+  enableDragAndDrop();
 }
 
-todoForm.addEventListener('submit', e => {
-  e.preventDefault();
-  const text = todoInput.value.trim();
-  if (text) {
-    todos.push({ text, completed: false });
-    todoInput.value = '';
-    renderTodos();
-  }
-});
+// Drag and Drop
+function enableDragAndDrop() {
+  let dragging = null;
 
-filterBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    filterBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    filter = btn.dataset.filter;
-    renderTodos();
+  document.querySelectorAll("#todo-list li").forEach(li => {
+    li.addEventListener("dragstart", () => dragging = li);
+    li.addEventListener("dragover", e => e.preventDefault());
+    li.addEventListener("drop", e => {
+      e.preventDefault();
+      if (dragging && dragging !== li) {
+        todoList.insertBefore(dragging, li.nextSibling);
+        reorderTodos();
+      }
+    });
   });
-});
-
-clearBtn.addEventListener('click', () => {
-  todos = todos.filter(t => !t.completed);
-  renderTodos();
-});
-
-// Initial render
-renderTodos();
-</script>
-<!-- ...existing code... -->
+}
+// Reorder todos array based on current DOM order
+function reorderTodos() {
+  const newOrder = [];
+  document.querySelectorAll("#todo-list li span").forEach(span => {
+    const todo = todos.find(t => t.text === span.textContent);
+    if (todo) newOrder.push(todo);
+  });
+  todos = newOrder;
+}
